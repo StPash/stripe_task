@@ -10,15 +10,16 @@ git clone <адрес репозитория>
 ```commandline
 python -m venv venv
 ```
-3) Установите зависимости
+3) Создайте файл .env на основе .env_template со своими переменными
+4) Установите зависимости
 ```commandline
 pip install -r requirements.txt
 ```
-4) Выполните миграции:
+5) Выполните миграции:
 ```commandline
 python manage.py migrate
 ```
-5) Запуск проекта с помощью Docker
+6) Запуск проекта с помощью Docker
 ```commandline
 docker-compose up --build
 ```
