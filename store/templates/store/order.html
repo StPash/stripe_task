@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Buy order(id: {{ order.id }})</title>
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+    <h1>Order id: {{ order.id }}</h1>
+    <h2>Items in order:</h2>
+    <ul>
+        {% for order_item in order.prefetch_order_items %}
+        <li>
+            <p>Name: {{ order_item.item.name }}:</p>
+            <p>Description: {{ order_item.item.description }}</p>
+            <p>Quantity: {{ order_item.quantity }}</p>
+            <p>Price per 1: {{ order_item.item.price }} {{ order_item.item.currency.upper }}</p>
+        </li>
+        {% endfor %}
+    </ul>
+    {% if order.discount %}
+    <p> Скидка: {{ order.discount.amount }}%</p>
+    {% endif %}
+    {% if order.tax %}
+    <p> Налог: {{ order.tax.amount }}%</p>
+    {% endif %}
+
+
+    <button id="buy-button">Buy</button>
+
+
+    <script>
+        var stripe = Stripe( '{{ stripe_key }}' );
+        var buyButton = document.getElementById('buy-button');
+        buyButton.addEventListener('click', function() {
+            fetch('{{ domain }}/buy_order/{{ order.id }}/', {method: 'GET'})
+                .then(response => response.json())
+                .then(session => stripe.redirectToCheckout({ sessionId: session.id }))
+        });
+    </script>
+</body>
+
+</html>
